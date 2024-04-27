@@ -7,8 +7,17 @@ return {
     },
     config = function()
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<C-p>", builtin.find_files, {})
-      vim.keymap.set("n", "<Leader>fg", builtin.live_grep, {})
+      vim.keymap.set("n", "<C-p>", function()
+        builtin.find_files({ find_command = { "find", ".", "-type", "f", "-printf", "%P\n" } })
+      end, {})
+      --vim.keymap.set("n", "<Leader>fg", builtin.live_grep, {})
+      vim.keymap.set("n", "<Leader>fg", function()
+        builtin.live_grep({
+          additional_args = function(opts)
+            return { "--hidden" }
+          end,
+        })
+      end, {})
     end,
   },
   {
